@@ -1,0 +1,46 @@
+{% extends "shop/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<!-- section title -->
+				<div class="col-md-12">
+					<div class="section-title">
+						<h2 class="title">Manage your account</h2>
+					</div>
+				</div>
+				<!-- section title -->
+                <div class="col-md-6">
+                    <div class="">
+                        <img class="img img-rounded" src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+                        <h2 class="mt-4">{{ user.username }}</h2>
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+				<form id="register-form" method="post" class="clearfix" enctype="multipart/form-data">
+                    {% csrf_token %}
+					<div class="col-md-6">
+                        <div class="section-title">
+							<h3 class="title">Profile Info</h3>
+                        </div>
+                        {{ u_form|crispy }}
+                        {{ p_form|crispy }}
+                        <div class="pull-center">
+							<button class="primary-btn" type="submit">Update</button>
+                        </div>
+					</div>
+				</form>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+{% endblock content %}

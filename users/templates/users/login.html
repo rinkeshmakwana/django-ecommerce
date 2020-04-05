@@ -1,0 +1,33 @@
+{% extends "shop/layout.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<form id="register-form" method="post" class="clearfix">
+                    {% csrf_token %}
+					<div class="col-md-6">
+                        <div class="section-title">
+							<h3 class="title">Log In</h3>
+                        </div>
+                        {{ form|crispy }}
+                        <div class="pull-center">
+							<button class="primary-btn" type="submit">Login</button>
+                        </div>
+					</div>
+				</form>
+                <div class="border-top pt-3">
+                    <small class="text-muted">Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+                    </small>
+                </div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+{% endblock content %}
