@@ -12,11 +12,18 @@ def home(request):
     return render(request, 'shop/index.html', context)
 
 
-class ProductListView(ListView):
+class HomeListView(ListView):
     model = Product
     template_name = 'shop/index.html'
     context_object_name = 'products'
     ordering = ['-list_date']
+
+
+class ProductListView(ListView):
+    model = Product
+    context_object_name = 'products'
+    ordering = ['-list_date']
+    paginate_by = 3
 
 
 class ProductDetailView(DetailView):
@@ -25,7 +32,7 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    fields = ['product_name', 'product_description', 'product_price', 'product_image', 'product_rating']
+    fields = ['product_name', 'product_description', 'product_price', 'product_rating']
 
     def form_valid(self, form):
         form.instance.product_seller = self.request.user
@@ -34,7 +41,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
 class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
-    fields = ['product_name', 'product_description', 'product_price', 'product_image', 'product_rating']
+    fields = ['product_name', 'product_description', 'product_price', 'product_rating']
 
     def form_valid(self, form):
         form.instance.product_seller = self.request.user

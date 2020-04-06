@@ -64,7 +64,7 @@
 				<!-- section title -->
 
 				<!-- Product Single -->
-				{% for product in products %}
+				{% for product in products|slice:":4" %}
 				<div class="col-md-3 col-sm-6 col-xs-6">
 					<div class="product product-single">
 						<div class="product-thumb">
