@@ -32,7 +32,7 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    fields = ['product_name', 'product_description', 'product_price', 'product_rating']
+    fields = ['product_name', 'product_description', 'product_price', 'product_image', 'product_rating']
 
     def form_valid(self, form):
         form.instance.product_seller = self.request.user
