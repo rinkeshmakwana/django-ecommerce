@@ -1,0 +1,111 @@
+{% extends "shop/layout.html" %}
+{% load cart_template_tags %}
+{% block content %}
+<!-- section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <form action="" method="post" id="checkout-form" class="clearfix">
+                {% csrf_token %}
+                <div class="col-md-8">
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">Billing Details</h3>
+                        </div>
+                        <div class="hideable_form">
+                            <div class="form-group">
+                                <input class="input" id="address" type="text" name="address" placeholder="Address">
+                            </div>
+                            <div class="form-group">
+                                <input class="input" id="city" type="text" name="city" placeholder="City">
+                            </div>
+                            <div class="form-group">
+                                <input class="input" id="state" type="text" name="state" placeholder="State">
+                            </div>
+                            <div class="form-group">
+                                <input class="input" id="country" type="text" name="country" placeholder="Country">
+                            </div>
+                            <div class="form-group">
+                                <input class="input" id="zip" type="text" name="zip" placeholder="ZIP Code">
+                            </div>
+                        </div>
+                        {% if default_address %}
+                        <div class="form-group">
+                            <div class="input-checkbox">
+                                <input type="checkbox" name="use_default_address" id="use_default_address">
+                                <label class="font-weak" for="use_default_address">Use Default Address:</label>
+                                <div class="caption">
+                                    <p>{{default_address.full_address}}<p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="payments-methods">
+                        <div class="section-title">
+                            <h4 class="title">Payments Methods</h4>
+                        </div>
+                        {% for value, name in form.fields.payment_option.choices %}
+                        <div class="input-checkbox">
+                            <input type="radio" name="payment_option" id="{{name}}" value="{{value}}" required>
+                            <label for="{{name}}">{{name}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="pull-right">
+                        <button class="primary-btn" type="submit">Place Order</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="order-summary clearfix">
+                        <div class="section-title">
+                            <h3 class="title">Cart Summary</h3>
+                        </div>
+                        <table class="shopping-cart-table table">
+                            <tbody>
+                                {% for order_product in object.products.all %}
+                                <tr>
+                                    <td class="details" colspan="4"><strong>{{ order_product.quantity }} x</strong><a href="#"> {{ order_product.product.product_name }}</a></td>
+                                    <td class="total text-right" colspan="2"><strong>Rs. {{ order_product.get_total_product_price }}</strong></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="empty" colspan="2"></th>
+                                    <th class="text-right">Sub Total</th>
+                                    <th colspan="3" class="sub-total">Rs. {{ request.user|cart_product_total }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /section -->
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    var hideable_form = $('.hideable_form');
+
+    var use_default_address = document.querySelector("input[name=use_default_address]")
+
+    use_default_address.addEventListener('change',function(){
+        if (this.checked){
+            hideable_form.hide();
+        } else {
+            hideable_form.show();
+        }
+    })
+</script>
+{% endblock extra_scripts %}
