@@ -5,7 +5,12 @@
 	<div class="container">
 		<ul class="breadcrumb">
 			<li><a href="{% url 'shop-home' %}">Home</a></li>
-			<li class="active">Products</li>
+			{% for product in products|slice:":1" %}
+			{% if product.category.parent %}
+			<li><a href="{% url 'shop-products' product.category.parent %}">{{product.category.parent}}</a></li>
+			{% endif %}
+			<li><a class="active" href="{% url 'shop-products' product.category %}">{{product.category}}</a></li>
+			{% endfor %}
 		</ul>
 	</div>
 </div>
@@ -215,13 +220,19 @@
 								<div class="product-thumb">
 									<div class="product-label">
 										<span>New</span>
-										<span class="sale">-20%</span>
+										{% if product.get_discount_percentage %}
+										<span class="sale">-{{ product.get_discount_percentage|floatformat }}%</span>
+										{% endif %}
 									</div>
-									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+<!--									<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>-->
 									<img src="{{ product.product_image.url }}" alt="">
 								</div>
 								<div class="product-body">
-									<h3 class="product-price">₹ {{ product.product_price }} <del class="product-old-price">$45.00</del></h3>
+									<h3 class="product-price">₹ {{ product.product_price }}
+										{% if product.product_mrp %}
+										<del class="product-old-price">₹ {{product.product_mrp}}</del>
+										{% endif %}
+									</h3>
 									<div class="product-rating">
 										<i class="fa fa-star"></i>
 										<i class="fa fa-star"></i>

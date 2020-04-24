@@ -25,6 +25,8 @@ class Product(models.Model):
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     product_description = models.TextField()
     product_price = models.PositiveIntegerField()
+    product_mrp = models.PositiveIntegerField(null=True, blank=True)
+    discount_tag = models.IntegerField(null=True, blank=True)
     product_image = models.ImageField(default='default.jpg', upload_to='product_images')
     product_rating = models.IntegerField()
     product_seller = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -42,6 +44,11 @@ class Product(models.Model):
 
     def get_buy_now_url(self):
         return reverse('buy-now', kwargs={'slug': self.slug})
+
+    def get_discount_percentage(self):
+        if self.product_mrp:
+            discounted_percentage = ((self.product_mrp - self.product_price)/self.product_price)*100
+            return discounted_percentage
 
 
 class OrderProduct(models.Model):

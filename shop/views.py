@@ -16,6 +16,12 @@ class HomeListView(ListView):
     context_object_name = 'products'
     ordering = ['-list_date']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_list'] = Product.objects.filter(category__name='Electronics')
+        context['product_list1'] = Product.objects.filter(category__name='Mobiles')
+        return context
+
 
 class ProductListView(ListView):
     model = Product
