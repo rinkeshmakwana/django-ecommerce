@@ -63,7 +63,9 @@
 						</div>
 						<h2 class="product-name">{{ object.product_name }}</h2>
 						<h3 class="product-price">₹ {{ object.product_price }}
+							{% if object.product_mrp %}
 							<del class="product-old-price">₹ {{object.product_mrp}}</del>
+							{% endif %}
 						</h3>
 						<div>
 							<div class="product-rating">
@@ -76,7 +78,9 @@
 							<a href="#">3 Review(s) / Add Review</a>
 						</div>
 						<p><strong>Availability:</strong> In Stock</p>
-						<p><strong>Brand:</strong> E-SHOP</p>
+						{% if object.brand %}
+						<p><strong>Brand:</strong> {{object.brand}}</p>
+						{% endif %}
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
 							dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 						<div class="product-options">
@@ -87,7 +91,7 @@
 								<li><a href="#">SL</a></li>
 							</ul>
 							<ul class="color-option">
-								<li><span class="text-uppercase">Color:</span></li>
+								<li><span>Color:</span></li>
 								<li class="active"><a href="#" style="background-color:#475984;"></a></li>
 								<li><a href="#" style="background-color:#8A2454;"></a></li>
 								<li><a href="#" style="background-color:#BF6989;"></a></li>

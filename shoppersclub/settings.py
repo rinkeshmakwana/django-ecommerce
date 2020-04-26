@@ -131,3 +131,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'demo@gmail.com'
 EMAIL_HOST_PASSWORD = 'demo@123'
+

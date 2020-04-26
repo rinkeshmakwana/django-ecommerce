@@ -114,7 +114,7 @@
 			<!-- section title -->
 
 			<!-- Product Single -->
-			{% for product in product_list %}
+			{% for product in product_list|slice:":4" %}
 			<div class="col-md-3 col-sm-6 col-xs-6">
 				<div class="product product-single">
 					<div class="product-thumb">
@@ -165,7 +165,7 @@
 			<!-- section title -->
 
 			<!-- Product Single -->
-			{% for product in product_list1 %}
+			{% for product in product_list1|slice:":4" %}
 			<div class="col-md-3 col-sm-6 col-xs-6">
 				<div class="product product-single">
 					<div class="product-thumb">

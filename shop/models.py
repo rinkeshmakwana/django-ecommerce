@@ -26,12 +26,13 @@ class Product(models.Model):
     product_description = models.TextField()
     product_price = models.PositiveIntegerField()
     product_mrp = models.PositiveIntegerField(null=True, blank=True)
-    discount_tag = models.IntegerField(null=True, blank=True)
     product_image = models.ImageField(default='default.jpg', upload_to='product_images')
     product_rating = models.IntegerField()
     product_seller = models.ForeignKey(User, on_delete=models.CASCADE)
     list_date = models.DateTimeField(default=timezone.now)
     slug = models.SlugField()
+    color = models.CharField(max_length=50, null=True, blank=True)
+    brand = models.ForeignKey('Brand', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.product_name
@@ -47,8 +48,15 @@ class Product(models.Model):
 
     def get_discount_percentage(self):
         if self.product_mrp:
-            discounted_percentage = ((self.product_mrp - self.product_price)/self.product_price)*100
+            discounted_percentage = ((self.product_mrp - self.product_price)/self.product_mrp)*100
             return discounted_percentage
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 
 class OrderProduct(models.Model):

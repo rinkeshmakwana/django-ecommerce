@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 
 from .forms import CheckoutForm, PaymentForm
-from .models import Product, OrderProduct, Order, Address, Category
+from .models import Product, OrderProduct, Order, Address, Category, Brand
 
 
 class HomeListView(ListView):
@@ -18,22 +18,31 @@ class HomeListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['product_list'] = Product.objects.filter(category__name='Electronics')
-        context['product_list1'] = Product.objects.filter(category__name='Mobiles')
+        context['product_list'] = Product.objects.filter(category__name='Electronics').order_by('-list_date')
+        context['product_list1'] = Product.objects.filter(category__name='Mobiles').order_by('-list_date')
         return context
 
 
 class ProductListView(ListView):
     model = Product
     context_object_name = 'products'
-    # queryset = Product.objects.filter(category__name='Electronics')  # newly added
-    ordering = ['-list_date']
     paginate_by = 20
 
     # newly added
     def get_queryset(self):
         self.category = get_object_or_404(Category, name=self.kwargs['category'])
-        return Product.objects.filter(category=self.category)
+        return Product.objects.filter(category=self.category).order_by("-list_date")
+
+
+class ProductFilterView(ListView):
+    model = Product
+    template_name = 'shop/product_list.html'
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = filterbar(self.request)
+        return context
 
 
 class ProductDetailView(DetailView):
@@ -267,3 +276,17 @@ class PaymentView(LoginRequiredMixin, View):
         form = PaymentForm(self.request.POST)
 
         return redirect('/')
+
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+
+def filterbar(request):
+    qs = Product.objects.all()
+    brand = request.GET.get('brand')
+
+    if is_valid_queryparam(brand):
+        qs = qs.filter(brand__name=brand)
+
+    return qs
