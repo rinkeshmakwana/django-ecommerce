@@ -9,7 +9,7 @@
 			</div>
 			<div class="pull-right">
 				<ul class="header-top-links">
-					<li><a href="#">Store</a></li>
+					<li><a href="#">Sell with us</a></li>
 					<li><a href="#">Track Order</a></li>
 					<li><a href="#">Help</a></li>
 				</ul>
@@ -111,12 +111,7 @@
 										<div class="product-body">
 											<h3 class="product-price">Rs. {{ order_product.product.product_price }}
 												<span class="qty">x
-													<a href="{% url 'add-to-cart' order_product.product.slug %}">
-														<i class="fa fa-plus mr-2"></i>
-													</a>{{ order_product.quantity }}
-													<a href="{% url 'remove-single-product-from-cart' order_product.product.slug %}">
-														<i class="fa fa-minus ml-2"></i>
-													</a>
+													{{ order_product.quantity }}
 												</span>
 											</h3>
 											<h2 class="product-name"><a href="{% url 'product-detail' order_product.product.slug %}">{{ order_product.product.product_name }}</a></h2>

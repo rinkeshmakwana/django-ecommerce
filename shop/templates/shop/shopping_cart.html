@@ -34,8 +34,20 @@
 										<li><span>Color: Camelot</span></li>
 									</ul>
 								</td>
-								<td class="price text-center"><strong>Rs. {{ order_product.product.product_price }}</strong><br><del class="font-weak"><small>₹ {{order_product.product.product_mrp}}</small></del></td>
-								<td class="qty text-center"><input class="input" type="number" value="{{ order_product.quantity }}"></td>
+								<td class="price text-center"><strong>Rs. {{ order_product.product.product_price }}</strong><br>
+									{% if order_product.product.product_mrp %}
+									<del class="font-weak"><small>₹ {{order_product.product.product_mrp}}</small></del>
+									{% endif %}
+								</td>
+								<td class="qty text-center">
+									<a href="{% url 'remove-single-product-from-cart' order_product.product.slug %}">
+										<i class="fa fa-minus"></i>
+									</a>
+									<input class="input" type="number" value="{{ order_product.quantity }}">
+									<a href="{% url 'add-to-cart' order_product.product.slug %}">
+										<i class="fa fa-plus"></i>
+									</a>
+								</td>
 								<td class="total text-center"><strong class="primary-color">Rs. {{ order_product.get_total_product_price }}</strong></td>
 								<td class="text-right"><a href="{% url 'remove-from-cart' order_product.product.slug %}" class="main-btn icon-btn"><i class="fa fa-close"></i></a></td>
 							</tr>

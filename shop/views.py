@@ -33,15 +33,22 @@ class ProductListView(ListView):
         self.category = get_object_or_404(Category, name=self.kwargs['category'])
         return Product.objects.filter(category=self.category).order_by("-list_date")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        context['brands'] = Brand.objects.all()
+        return context
+
 
 class ProductFilterView(ListView):
     model = Product
-    template_name = 'shop/product_list.html'
+    template_name = 'shop/product_filter_list.html'
     paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['products'] = filterbar(self.request)
+        context['products'] = filterbarView(self.request)
+        context['brands'] = Brand.objects.all()
         return context
 
 
@@ -282,11 +289,34 @@ def is_valid_queryparam(param):
     return param != '' and param is not None
 
 
-def filterbar(request):
-    qs = Product.objects.all()
-    brand = request.GET.get('brand')
+def filterbarView(request):
+    qs = Product.objects.get_queryset()
 
-    if is_valid_queryparam(brand):
-        qs = qs.filter(brand__name=brand)
+    category_query = request.GET.get('category')
+    brand_query = request.GET.get('brand_name')
+    price_min = request.GET.get('price_min')
+    price_max = request.GET.get('price_max')
+    top_filter = request.GET.get('top_filter')
+
+    if is_valid_queryparam(category_query) and category_query != 'Choose...':
+        qs = qs.filter(category__name=category_query)
+
+    if is_valid_queryparam(price_min):
+        qs = qs.filter(product_price__gte=price_min)
+
+    if is_valid_queryparam(price_max):
+        qs = qs.filter(product_price__lt=price_max)
+
+    if is_valid_queryparam(top_filter) and top_filter == 'Price-High to Low':
+        qs = qs.order_by('-product_price')
+
+    elif is_valid_queryparam(top_filter) and top_filter == 'Price-Low to High':
+        qs = qs.order_by('product_price')
+
+    elif is_valid_queryparam(top_filter) and top_filter == 'Newest First':
+        qs = qs.order_by('-list_date')
+
+    if is_valid_queryparam(brand_query):
+        qs = qs.filter(brand__name=brand_query)
 
     return qs
